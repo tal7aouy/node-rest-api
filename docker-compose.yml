@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app/src
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongodb
+    environment:
+      - NODE_ENV=production
+    command: npm run dev
+    networks:
+      - my-network
+
+  mongodb:
+    image: mongo
+    restart: unless-stopped
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
